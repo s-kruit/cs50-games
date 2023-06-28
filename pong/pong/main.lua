@@ -259,15 +259,37 @@ function love.update(dt)
         y_trajectory = ball.y
         dy_trajectory = ball.dy
         -- simulate trajectory of ball until it gets to player 1 paddle's x position
-        while x_trajectory > 0 do
-            y_at_end = 
+        while x_trajectory > 5 do
+            -- determine y position if ball follows current trajectory until we reach player 1's x position, assuming no height limits
+            y_at_end = y_trajectory + dy_trajectory * (5 - x_trajectory) / ball.dx
+            -- if y would be above top of screen, the ball will need to bounce downwards at the top of screen before reaching player 1
+            if y_at_end < 0 then
+                x_trajectory = x_trajectory - y_trajectory * ball.dx / dy_trajectory
+                y_trajectory = 0
+                dy_trajectory = -dy_trajectory
+            -- if y would be below bottom of screen, the ball will need to bounce upwards at the bottom of screen before reaching player 1
+            elseif y_at_end > VIRTUAL_HEIGHT - 4 then
+                x_trajectory = x_trajectory + (VIRTUAL_HEIGHT - 4 - y_trajectory) * ball.dx / dy_trajectory
+                y_trajectory = VIRTUAL_HEIGHT - 4
+                dy_trajectory = -dy_trajectory
+            -- if y is between top and bottom of screen, then this is where the ball will reach player 1 (i.e. this is the target position for player 1)
+            else
+                x_trajectory = 5
+                y_trajectory = y_at_end
+            end                
+        end
+        -- move player 1 towards where the ball will arrive (accounting for ball width of 4 and paddle length of 20, aim for middle of paddle to hit middle of ball)
+        if player1.y < y_trajectory - 8 then
+            player1.dy = PADDLE_SPEED
+        elseif player1.y > y_trajectory - 8 then
+            player1.dy = -PADDLE_SPEED
+        else
+            player1.dy = 0
         end
     else
         player1.dy = 0
     end
-        
-        
-
+    
     -- player 2
     if love.keyboard.isDown('up') then
         player2.dy = -PADDLE_SPEED
