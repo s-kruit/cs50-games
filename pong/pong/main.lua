@@ -245,9 +245,9 @@ function love.update(dt)
     -- if ball is moving away from AI player
     if ball.dx > 0 then
         -- move AI paddle towards middle of screen
-        if player1.y < VIRTUAL_HEIGHT / 2 + 10 then
+        if player1.y < VIRTUAL_HEIGHT / 2 - 10 then
             player1.dy = PADDLE_SPEED
-        elseif player1.y > VIRTUAL_HEIGHT / 2 + 10 then
+        elseif player1.y > VIRTUAL_HEIGHT / 2 - 10 then
             player1.dy = -PADDLE_SPEED
         else
             player1.dy = 0
