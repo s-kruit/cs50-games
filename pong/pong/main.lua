@@ -242,8 +242,31 @@ function love.update(dt)
     -- end
 
     -- AI player 1
-    if ball.dx < 0 then
-        if player1.y < VIRTUAL_HEIGHT / 2 + 
+    -- if ball is moving away from AI player
+    if ball.dx > 0 then
+        -- move AI paddle towards middle of screen
+        if player1.y < VIRTUAL_HEIGHT / 2 + 10 then
+            player1.dy = PADDLE_SPEED
+        elseif player1.y > VIRTUAL_HEIGHT / 2 + 10 then
+            player1.dy = -PADDLE_SPEED
+        else
+            player1.dy = 0
+        end
+    -- else if ball is moving towards AI player
+    elseif ball.dx < 0 then
+        -- calculate where y position of ball will be when it reaches player 1
+        x_trajectory = ball.x
+        y_trajectory = ball.y
+        dy_trajectory = ball.dy
+        -- simulate trajectory of ball until it gets to player 1 paddle's x position
+        while x_trajectory > 0 do
+            y_at_end = 
+        end
+    else
+        player1.dy = 0
+    end
+        
+        
 
     -- player 2
     if love.keyboard.isDown('up') then
